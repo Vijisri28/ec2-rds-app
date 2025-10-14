@@ -1,0 +1,89 @@
+📘 Project Title
+
+Building and Connecting an Amazon RDS Database with an EC2 Web Application
+
+🎯 Objective
+
+To create and configure a cloud-based MySQL database using Amazon RDS, and connect it to a web application hosted on an Amazon EC2 instance within a Virtual Private Cloud (VPC).
+
+🧰 Tools and AWS Services Used
+
+Amazon EC2 – Hosts the web application
+
+Amazon RDS (MySQL) – Cloud database service
+
+Amazon VPC – Provides network isolation
+
+Subnets & DB Subnet Groups – For multi-AZ deployment
+
+Security Groups – Control inbound/outbound access
+
+IAM – Manages permissions and roles
+
+⚙️ Step-by-Step Procedure
+
+Task 1: Create a VPC and Security Groups
+
+1. Created a VPC (Lab VPC) with private and public subnets.
+
+2. Configured Security Groups:
+
+WebServer Security Group – allows HTTP (port 80) and SSH (port 22).
+
+DB Security Group – allows MySQL (port 3306) access from the web server.
+
+Task 2: Create a DB Subnet Group
+
+1. Opened the RDS console → Subnet groups → Create DB Subnet Group.
+
+2. Name: DB-Subnet-Group
+Description: DB Subnet Group
+3. Selected Lab VPC.
+4. Added two private subnets from different Availability Zones:
+10.0.1.0/24 (Private Subnet 1)
+10.0.3.0/24 (Private Subnet 2)
+5. Clicked Create to complete the subnet group setup.
+
+Task 3: Create an Amazon RDS DB Instance
+
+1. Opened RDS → Databases → Create Database.
+2. Chose:
+Standard create
+Engine type: MySQL
+Version: Latest available
+Template: Dev/Test
+
+3. DB Instance Identifier: lab-db
+
+Master username: main
+
+Password: lab-password
+
+4. Instance class: db.t3.medium (Burstable)
+5. Storage type: General Purpose (SSD)
+6. VPC: Lab VPC
+7. Selected DB Security Group under existing VPC security groups.
+8. Disabled Enhanced Monitoring and Automated Backups for faster deployment.
+9. Initial Database Name: lab
+10. Clicked Create Database and waited until status became Available.
+Task 4: Interact with the Database via Web Application
+
+1. Copied the RDS Endpoint from the RDS console.
+Example:
+lab-db.cggqlhnxvnw.us-west-2.rds.amazonaws.com
+2. Opened the Web Application using the EC2 Public IP.
+3. Clicked on the RDS link at the top of the page.
+4. Entered:
+Endpoint: (copied from RDS)
+Database name: lab
+Username: main
+Password: lab-password
+5. Clicked Submit.
+The app connected to the RDS MySQL database successfully.
+6. Tested by adding, editing, and deleting contacts in the Address Book.
+Data was stored and replicated across Availability Zones.
+
+📊 Result
+
+The web application successfully connected to the RDS MySQL database hosted in AWS.
+All CRUD operations (Create, Read, Update, Delete) worked properly, and the data was automatically replicated to the standby instance in a second Availability Zone for high availability.
