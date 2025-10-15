@@ -1,5 +1,6 @@
 # ec2-rds-app
 Connect an Amazon RDS database with a web app on EC2
+
 📘 Project Title
 
 Building and Connecting an Amazon RDS Database with an EC2 Web Application
